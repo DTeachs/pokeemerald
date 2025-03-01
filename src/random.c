@@ -5,11 +5,12 @@
 COMMON_DATA u32 gRngValue = 0;
 COMMON_DATA u32 gRng2Value = 0;
 
-u16 Random(void)
-{
-    gRngValue = ISO_RANDOMIZE1(gRngValue);
-    return gRngValue >> 16;
-}
+u16 Random(void) {
+    gRngValue ^= gRngValue << 13;
+    gRngValue ^= gRngValue >> 17;
+    gRngValue ^= gRngValue << 5;
+    return gRngValue & 0xFFFF;
+} 
 
 void SeedRng(u32 seed)
 {
@@ -21,8 +22,9 @@ void SeedRng2(u32 seed)
     gRng2Value = seed;
 }
 
-u16 Random2(void)
-{
-    gRng2Value = ISO_RANDOMIZE1(gRng2Value);
-    return gRng2Value >> 16;
-}
+u16 Random2(void) {
+    gRng2Value ^= gRng2Value << 13;
+    gRng2Value ^= gRngValue >> 17;
+    gRng2Value ^= gRng2Value << 5;
+    return gRng2Value & 0xFFFF;
+} 
